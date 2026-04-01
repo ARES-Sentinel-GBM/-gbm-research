@@ -41,13 +41,15 @@ A collection of Python scripts for genome-scale metabolic modeling (GMM) of glio
 
 ## 🚀 Quick Start
 
-### 1. Install Dependencies
+### Option 1: Local Installation
+
+#### 1. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Run an Analysis
+#### 2. Run an Analysis
 
 ```bash
 # Flux analysis
@@ -60,9 +62,48 @@ python scripts/gene_ko.py --genes RRM1 RRM2 TYMS GLS
 python scripts/survival_analysis.py --gene GLS --percentile 50
 ```
 
-### 3. Check Results
+#### 3. Check Results
 
 Results are saved to `results/` directory.
+
+---
+
+### Option 2: Docker (Recommended)
+
+#### Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) installed
+
+#### Quick Start
+
+```bash
+# Build the image
+docker build -t ares-gbm .
+
+# Run flux analysis
+docker run --rm -v $(pwd)/results:/app/results ares-gbm \
+    python scripts/flux_analysis.py --high 75 --low 25 --delta 0.01
+
+# Run gene knockout
+docker run --rm -v $(pwd)/results:/app/results ares-gbm \
+    python scripts/gene_ko.py --genes RRM2 GLS LDHA
+
+# Run survival analysis
+docker run --rm -v $(pwd)/results:/app/results ares-gbm \
+    python scripts/survival_analysis.py --gene GLS --expr data/expression_example.csv --survival data/survival_example.csv
+```
+
+#### Using Docker Compose
+
+```bash
+# Run analysis
+docker compose run ares-gbm python scripts/flux_analysis.py
+
+# Start Jupyter notebook for interactive analysis
+docker compose --profile jupyter up jupyter
+```
+
+Then open `http://localhost:8888` in your browser.
 
 ---
 

@@ -1,0 +1,39 @@
+# ARES-GBM Research Tools — Docker Compose
+# Easy setup for running metabolic modeling analyses
+
+version: '3.8'
+
+services:
+  ares-gbm:
+    build: .
+    image: ares-gbm-research:latest
+    container_name: ares-gbm-analysis
+    volumes:
+      # Mount local data directory
+      - ./data:/app/data
+      # Mount results directory
+      - ./results:/app/results
+      # Mount notebooks for interactive analysis
+      - ./notebooks:/app/notebooks
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    # Example: run flux analysis by default
+    # Override with: docker compose run ares-gbm python scripts/gene_ko.py --genes RRM2 GLS
+    command: python scripts/flux_analysis.py --help
+
+  # Jupyter notebook service for interactive analysis
+  jupyter:
+    build: .
+    image: ares-gbm-research:latest
+    container_name: ares-gbm-jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./data:/app/data
+      - ./results:/app/results
+      - ./notebooks:/app/notebooks
+    working_dir: /app
+    command: jupyter notebook --no-browser --ip=0.0.0.0 --port=8888 --allow-root
+    profiles:
+      - jupyter
