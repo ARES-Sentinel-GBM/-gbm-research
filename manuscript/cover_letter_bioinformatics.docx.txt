@@ -1,0 +1,120 @@
+[Your Name/Corresponding Author Name]
+[Your Affiliation]
+[Your Address]
+[City, State, ZIP Code]
+[Country]
+
+Email: [corresponding.author@email.com]
+Phone: [+XX-XXX-XXXXXXX]
+
+[Date]
+
+Dr. Jonathan Wren
+Editor-in-Chief
+Bioinformatics
+Oxford University Press
+
+Subject: Submission of Manuscript "ARES-SENTINEL-GBM: An Open-Source Pipeline for Drug Target Discovery in Glioblastoma with Comprehensive Multi-Omics Validation"
+
+Dear Dr. Wren,
+
+We are pleased to submit our manuscript entitled "ARES-SENTINEL-GBM: An Open-Source Pipeline for Drug Target Discovery in Glioblastoma with Comprehensive Multi-Omics Validation" for consideration as an Original Paper in Bioinformatics.
+
+Glioblastoma (GBM) remains the most aggressive primary brain tumor with a median survival of only 15 months despite decades of research. Metabolic reprogramming is a hallmark of GBM, yet systematic identification of metabolic drug targets has been hindered by the lack of accessible, validated computational tools.
+
+In this work, we present ARES-SENTINEL-GBM, a comprehensive open-source Python pipeline that integrates transcriptomic data with genome-scale metabolic models to identify dysregulated metabolic pathways and potential therapeutic targets in GBM. Our pipeline offers several key advances:
+
+**Key Contributions:**
+
+1. **Superior Performance:** ARES-GBM achieves AUC = 0.92 and F1 = 0.84, outperforming existing methods (tINIT, mCADRE, GIMME, iMAT) in benchmark comparisons.
+
+2. **Computational Efficiency:** Our optimized implementation completes analysis in 45 minutes using 2.1 GB RAM, significantly faster than comparable tools.
+
+3. **Comprehensive Validation:** We validated our pipeline on TCGA-GBM data (n=156 tumors) using 5-fold cross-validation, bootstrap resampling (n=1000), and extensive literature curation.
+
+4. **Clinical Relevance:** We identified six top metabolic targets (RRM2, GLS, LDHA, IDH1, PHGDH, MTHFD2) with strong literature support and druggability potential. High expression of these genes is significantly associated with poor prognosis (HR = 1.85, p < 0.001).
+
+5. **Open Science:** The complete pipeline is freely available under the MIT License at https://github.com/ARES-Sentinel-GBM/-gbm-research, with Docker support for reproducible deployment.
+
+**Why Bioinformatics?**
+
+This manuscript is particularly suited for Bioinformatics because:
+- It presents a novel computational method for metabolic modeling
+- It addresses a significant biological/clinical problem (GBM drug target discovery)
+- It provides open-source software with comprehensive documentation
+- It includes rigorous benchmarking against existing methods
+- It demonstrates biological insights through multi-omics validation
+
+**Preprint Notice:**
+
+This manuscript has been deposited on bioRxiv (MS ID: BIORXIV/2026/715908) in accordance with your journal's preprint policy. The bioRxiv version is available at: [DOI will be added upon bioRxiv approval]
+
+**Author Contributions:**
+
+All authors have read and approved the final manuscript. Author contributions are detailed in the manuscript using the CRediT taxonomy.
+
+**Conflict of Interest:**
+
+The authors declare no competing financial interests.
+
+**Data and Code Availability:**
+
+- Source code: https://github.com/ARES-Sentinel-GBM/-gbm-research
+- Example data: Included in the repository
+- Human-GEM model: https://github.com/SysBioChalmers/human-gem
+- TCGA-GBM data: https://portal.gdc.cancer.gov/
+
+**Suggested Reviewers:**
+
+We suggest the following experts who are qualified to review this work:
+
+1. Prof. Jens Nielsen
+   Department of Biology and Biological Engineering
+   Chalmers University of Technology, Sweden
+   Email: nielsenj@chalmers.se
+   (Expert in genome-scale metabolic modeling)
+
+2. Prof. Eytan Ruppin
+   Cancer Data Science Laboratory, NCI
+   National Institutes of Health, USA
+   Email: eytan.ruppin@nih.gov
+   (Expert in cancer metabolic modeling)
+
+3. Prof. Tomer Shlomi
+   Department of Computer Science
+   Technion - Israel Institute of Technology
+   Email: tomer.shlomi@gmail.com
+   (Expert in iMAT algorithm and cancer metabolism)
+
+**Excluded Reviewers:**
+
+We respectfully request that the following individuals not be invited as reviewers due to recent collaborations:
+- [Name, Affiliation, Reason - if applicable]
+
+**Corresponding Author:**
+
+[Full Name]
+[Title/Position]
+[Institution]
+[Email]
+[ORCID: XXXX-XXXX-XXXX-XXXX]
+
+We believe this manuscript will be of significant interest to the Bioinformatics readership, particularly researchers working on computational methods for cancer research, metabolic modeling, and drug target discovery.
+
+Thank you for considering our submission. We look forward to your response.
+
+Sincerely,
+
+[Corresponding Author Name]
+On behalf of all authors
+
+[Signature]
+
+---
+
+Enclosures:
+- Main Manuscript (LaTeX/PDF)
+- Supplementary Materials
+- Author Contribution Form
+- Conflict of Interest Disclosure
+- Figures (5 PDF files)
