@@ -47,6 +47,9 @@ A collection of Python scripts for genome-scale metabolic modeling (GMM) of glio
 
 - **`drug_sensitivity.py`** — Drug sensitivity prediction integrating drug-target databases
 - **`subtype_analysis.py`** — GBM molecular subtype classification (Proneural/Neural/Classical/Mesenchymal)
+- **`synthetic_lethality.py`** — Systematic screen for combination therapy targets (Bliss independence)
+- **`drug_repositioning.py`** — FDA-approved drug screening for GBM repurposing (40+ drugs)
+- **`biomarker_discovery.py`** — Diagnostic and prognostic biomarker identification (ROC/AUC)
 - **`manuscript_figures.py`** — Generate publication-ready figures for manuscripts
 
 ### Utilities
