@@ -37,10 +37,21 @@ A collection of Python scripts for genome-scale metabolic modeling (GMM) of glio
 
 ## 📦 What's Included
 
+### Core Analyses
+
 - **`flux_analysis.py`** — Differential flux analysis between GBM and astrocytes
-- **`gene_ko.py`** — Simulated gene knockout effects on cell growth
-- **`survival_analysis.py`** — Survival analysis based on gene expression
-- **`utils.py`** — Helper functions for data loading and visualization
+- **`gene_ko.py`** — Simulated gene knockout effects on cell growth (single & combinatorial)
+- **`survival_analysis.py`** — Kaplan-Meier survival analysis based on gene expression
+
+### Advanced Analyses (NEW!)
+
+- **`drug_sensitivity.py`** — Drug sensitivity prediction integrating drug-target databases
+- **`subtype_analysis.py`** — GBM molecular subtype classification (Proneural/Neural/Classical/Mesenchymal)
+- **`manuscript_figures.py`** — Generate publication-ready figures for manuscripts
+
+### Utilities
+
+- **`utils.py`** — Helper functions for data loading, modeling, and visualization
 
 ---
 
@@ -56,6 +67,8 @@ pip install -r requirements.txt
 
 #### 2. Run an Analysis
 
+**Core Analyses:**
+
 ```bash
 # Flux analysis
 python scripts/flux_analysis.py --high 75 --low 25 --delta 0.01
@@ -65,6 +78,19 @@ python scripts/gene_ko.py --genes RRM1 RRM2 TYMS GLS
 
 # Survival analysis
 python scripts/survival_analysis.py --gene GLS --percentile 50
+```
+
+**Advanced Analyses (NEW!):**
+
+```bash
+# Drug sensitivity prediction
+python scripts/drug_sensitivity.py --expr data/expression_example.csv
+
+# GBM subtype classification
+python scripts/subtype_analysis.py --expr data/expression_example.csv
+
+# Generate manuscript figures
+python scripts/manuscript_figures.py --output results/figures
 ```
 
 #### 3. Check Results
