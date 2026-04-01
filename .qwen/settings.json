@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(C:\\Users\\johns\\Desktop\\ares-saas/**)",
+      "Bash(python *)",
+      "Bash(pdflatex *)",
+      "Bash(git init)",
+      "Bash(git remote *)",
+      "Bash(git add *)"
+    ]
+  },
+  "$version": 3
+}

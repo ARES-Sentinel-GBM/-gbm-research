@@ -1,0 +1,35 @@
+# Example clinical survival data
+# Format: SampleID, survival_days, event
+# - survival_days: days from diagnosis to death or last follow-up
+# - event: 1 = deceased, 0 = censored (alive or lost to follow-up)
+
+SampleID,survival_days,event
+Tumor_01,450,1
+Tumor_02,320,1
+Tumor_03,890,0
+Tumor_04,1250,0
+Tumor_05,280,1
+Tumor_06,540,1
+Tumor_07,720,0
+Tumor_08,180,1
+Tumor_09,960,0
+Tumor_10,410,1
+Tumor_11,1580,0
+Tumor_12,350,1
+Tumor_13,620,1
+Tumor_14,1100,0
+Tumor_15,240,1
+Tumor_16,830,0
+Tumor_17,490,1
+Tumor_18,1350,0
+Tumor_19,310,1
+Tumor_20,670,1
+
+# Note: This is example data only. For real analysis:
+# 1. Download clinical data from TCGA or institutional databases
+# 2. Ensure sample IDs match those in expression data
+# 3. Verify follow-up times and vital status accuracy
+#
+# Data sources:
+# - TCGA Clinical: https://portal.gdc.cancer.gov/
+# - cBioPortal: https://www.cbioportal.org/
