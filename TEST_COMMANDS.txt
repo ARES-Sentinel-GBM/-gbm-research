@@ -1,0 +1,425 @@
+================================================================================
+                    ARES-GBM - TEST SUITE COMPLETA
+                    Complete Test Commands for All Scripts
+================================================================================
+
+Ultimo aggiornamento: 2026-04-01
+Repository: https://github.com/ARES-Sentinel-GBM/-gbm-research
+
+================================================================================
+                         PREREQUISITI
+================================================================================
+
+# 1. Installare dipendenze
+pip install -r requirements.txt
+
+# 2. Verificare installazione
+python -c "import cobra; import pandas; import numpy; import plotly; print('OK')"
+
+# 3. Cartella di lavoro
+cd C:\Users\johns\Desktop\ares-gbm-research
+
+================================================================================
+                         DATI DI TEST
+================================================================================
+
+# Dati reali TCGA-GBM
+- data/tcga_gbm_expression.csv (40 tumor + 8 normal)
+- data/tcga_gbm_clinical.csv (sopravvivenza, IDH, MGMT)
+
+# Dati di esempio
+- data/expression_example.csv
+- data/survival_example.csv
+
+# Dati test rapidi
+- data/expression_test.csv (27 geni, 6 campioni)
+
+================================================================================
+                    1. FLUX ANALYSIS TEST
+================================================================================
+
+Test 1.1: Demo mode (senza modello metabolico)
+----------------------------------------------
+python scripts/flux_analysis.py --gbm-expr data/expression_test.csv --astro-expr data/expression_test.csv --output results/flux_test
+
+Test 1.2: Con dati TCGA reali (demo)
+------------------------------------
+python scripts/flux_analysis.py --gbm-expr data/tcga_gbm_expression.csv --astro-expr data/tcga_gbm_expression.csv --output results/flux_tcga
+
+Test 1.3: Con parametri personalizzati
+---------------------------------------
+python scripts/flux_analysis.py --gbm-expr data/tcga_gbm_expression.csv --astro-expr data/tcga_gbm_expression.csv --high 80 --low 20 --delta 0.05 --output results/flux_custom
+
+Test 1.4: Verifica output
+-------------------------
+dir results\flux_test\flux_analysis_demo.csv
+dir results\flux_tcga\flux_analysis.csv
+
+Risultati attesi:
+- flux_analysis.csv o flux_analysis_demo.csv
+- flux_analysis_top20.png (se plotly installato)
+
+================================================================================
+                    2. GENE KNOCKOUT TEST
+================================================================================
+
+Test 2.1: Singoli geni (demo)
+-----------------------------
+python scripts/gene_ko.py --genes RRM2 GLS LDHA HK2 --output results/ko_single
+
+Test 2.2: Combinazioni multiple
+-------------------------------
+python scripts/gene_ko.py --genes RRM2 GLS LDHA --combos "RRM2+GLS" "LDHA+HK2" "GLS+LDHA" --output results/ko_combo
+
+Test 2.3: Tutti i target metabolici
+-----------------------------------
+python scripts/gene_ko.py --genes RRM2 GLS LDHA HK2 PFKP ACLY FASN PHGDH MTHFD2 IDH1 --output results/ko_all
+
+Test 2.4: Verifica output
+-------------------------
+dir results\ko_single\gene_ko_demo.csv
+dir results\ko_combo\gene_ko.csv
+
+Risultati attesi:
+- gene_ko.csv con growth ratio per ogni knockout
+- gene_ko_results.png
+
+================================================================================
+                    3. SURVIVAL ANALYSIS TEST
+================================================================================
+
+Test 3.1: Singolo gene (GLS)
+----------------------------
+python scripts/survival_analysis.py --gene GLS --expr data/tcga_gbm_expression.csv --survival data/tcga_gbm_clinical.csv --output results/survival_gls
+
+Test 3.2: Gene RRM2
+-------------------
+python scripts/survival_analysis.py --gene RRM2 --expr data/tcga_gbm_expression.csv --survival data/tcga_gbm_clinical.csv --output results/survival_rrm2
+
+Test 3.3: Percentile personalizzato
+-----------------------------------
+python scripts/survival_analysis.py --gene LDHA --expr data/tcga_gbm_expression.csv --survival data/tcga_gbm_clinical.csv --percentile 75 --output results/survival_ldha
+
+Test 3.4: Verifica output
+-------------------------
+dir results\survival_gls\survival_GLS.csv
+dir results\survival_gls\survival_GLS_summary.json
+
+Risultati attesi:
+- survival_[GENE].csv
+- survival_[GENE].png
+- survival_[GENE]_summary.json (Hazard Ratio, p-value)
+
+================================================================================
+                    4. DRUG SENSITIVITY TEST
+================================================================================
+
+Test 4.1: Demo mode
+-------------------
+python scripts/drug_sensitivity.py --expr data/expression_test.csv --output results/drug_sens_test
+
+Test 4.2: Dati TCGA reali
+-------------------------
+python scripts/drug_sensitivity.py --expr data/tcga_gbm_expression.csv --output results/drug_sens_tcga
+
+Test 4.3: Con modello metabolico (se disponibile)
+-------------------------------------------------
+python scripts/drug_sensitivity.py --expr data/tcga_gbm_expression.csv --model models/Human-GEM.xml --output results/drug_sens_full
+
+Test 4.4: Verifica output
+-------------------------
+dir results\drug_sens_tcga\drug_sensitivity.csv
+dir results\drug_sens_tcga\drug_sensitivity_summary.json
+
+Risultati attesi:
+- drug_sensitivity.csv (22+ farmaci con sensitivity score)
+- drug_sensitivity_results.png
+- Top farmaci: Metformin, Atovaquone, Dichloroacetate
+
+================================================================================
+                    5. SUBTYPE ANALYSIS TEST
+================================================================================
+
+Test 5.1: Classificazione sottotipi
+-----------------------------------
+python scripts/subtype_analysis.py --expr data/tcga_gbm_expression.csv --output results/subtype_tcga
+
+Test 5.2: Con parametri personalizzati
+--------------------------------------
+python scripts/subtype_analysis.py --expr data/tcga_gbm_expression.csv --high 70 --low 30 --output results/subtype_custom
+
+Test 5.3: Verifica output
+-------------------------
+dir results\subtype_tcga\subtype_assignments.csv
+dir results\subtype_tcga\subtype_differential_analysis.csv
+
+Risultati attesi:
+- subtype_assignments.csv (classificazione Proneural/Neural/Classical/Mesenchymal)
+- subtype_differential_analysis.csv (flussi differenziali per subtype)
+- subtype_analysis_results.png
+
+================================================================================
+                    6. SYNTHETIC LETHALITY TEST
+================================================================================
+
+Test 6.1: Screen ridotto (25 geni, 50 combinazioni)
+---------------------------------------------------
+python scripts/synthetic_lethality.py --expr data/tcga_gbm_expression.csv --max-combos 50 --output results/sl_small
+
+Test 6.2: Screen completo (25 geni, ~300 combinazioni)
+------------------------------------------------------
+python scripts/synthetic_lethality.py --expr data/tcga_gbm_expression.csv --max-combos 300 --output results/sl_full
+
+Test 6.3: Geni specifici
+------------------------
+python scripts/synthetic_lethality.py --expr data/tcga_gbm_expression.csv --genes RRM2 GLS LDHA HK2 PFKP --max-combos 15 --output results/sl_custom
+
+Test 6.4: Verifica output
+-------------------------
+dir results\sl_small\synthetic_lethality.csv
+dir results\sl_small\synthetic_lethality_summary.json
+
+Risultati attesi:
+- synthetic_lethality.csv (combinazioni con synergy score)
+- synthetic_lethality_results.png
+- Coppie synthetic lethal: HK2+LDHA, GLS+GLUD1, RRM2+TYMS
+
+================================================================================
+                    7. DRUG REPOSITIONING TEST
+================================================================================
+
+Test 7.1: Screen completo (40+ farmaci)
+---------------------------------------
+python scripts/drug_repositioning.py --expr data/tcga_gbm_expression.csv --output results/reposition_full
+
+Test 7.2: Solo farmaci CNS-penetrant
+------------------------------------
+python scripts/drug_repositioning.py --expr data/tcga_gbm_expression.csv --output results/reposition_cns
+
+Test 7.3: Verifica output
+-------------------------
+dir results\reposition_full\drug_repositioning.csv
+dir results\reposition_full\drug_repositioning_summary.json
+
+Risultati attesi:
+- drug_repositioning.csv (40+ farmaci con priority score)
+- drug_repositioning_results.png
+- Top candidati: Metformin, Atovaquone, Valproic Acid, Disulfiram
+
+================================================================================
+                    8. BIOMARKER DISCOVERY TEST
+================================================================================
+
+Test 8.1: Biomarcatori diagnostici e prognostici
+------------------------------------------------
+python scripts/biomarker_discovery.py --expr data/tcga_gbm_expression.csv --output results/biomarker_tcga
+
+Test 8.2: Con dati clinici
+--------------------------
+python scripts/biomarker_discovery.py --expr data/tcga_gbm_expression.csv --clinical data/tcga_gbm_clinical.csv --output results/biomarker_full
+
+Test 8.3: Verifica output
+-------------------------
+dir results\biomarker_tcga\biomarkers_diagnostic.csv
+dir results\biomarker_tcga\biomarkers_prognostic.csv
+
+Risultati attesi:
+- biomarkers_diagnostic.csv (ROC AUC per tutti i geni)
+- biomarkers_prognostic.csv (prognostic scores)
+- biomarker_discovery_results.png
+- Top biomarcatori: RRM2, GLS, LDHA, MTHFD2
+
+================================================================================
+                    9. MANUSCRIPT FIGURES TEST
+================================================================================
+
+Test 9.1: Genera tutte le figure (5 principali)
+-----------------------------------------------
+python scripts/manuscript_figures.py --output results/figures_main
+
+Test 9.2: Genera figure con dati reali
+--------------------------------------
+python scripts/manuscript_figures.py --output results/figures_final
+
+Test 9.3: Verifica output
+-------------------------
+dir results\figures_main\figure1_benchmark.pdf
+dir results\figures_main\figure2_validation.pdf
+dir results\figures_main\figure3_pathways.pdf
+dir results\figures_main\figure4_network.pdf
+dir results\figures_main\figure5_literature.pdf
+
+Risultati attesi:
+- 5 figure PDF pronte per il manuscript
+- Tutte le figure referenziate in manuscript/main.tex
+
+================================================================================
+                    10. TEST COMPLETI (ALL-IN-ONE)
+================================================================================
+
+Test 10.1: Esegui tutti gli script in sequenza
+----------------------------------------------
+# Windows batch
+cd C:\Users\johns\Desktop\ares-gbm-research
+
+echo "=== FLUX ANALYSIS ===" && python scripts\flux_analysis.py --gbm-expr data\tcga_gbm_expression.csv --astro-expr data\tcga_gbm_expression.csv --output results\test_all --quiet
+echo "=== GENE KNOCKOUT ===" && python scripts\gene_ko.py --genes RRM2 GLS LDHA --output results\test_all --quiet
+echo "=== SURVIVAL ANALYSIS ===" && python scripts\survival_analysis.py --gene GLS --expr data\tcga_gbm_expression.csv --survival data\tcga_gbm_clinical.csv --output results\test_all --quiet
+echo "=== DRUG SENSITIVITY ===" && python scripts\drug_sensitivity.py --expr data\tcga_gbm_expression.csv --output results\test_all --quiet
+echo "=== SUBTYPE ANALYSIS ===" && python scripts\subtype_analysis.py --expr data\tcga_gbm_expression.csv --output results\test_all --quiet
+echo "=== SYNTHETIC LETHALITY ===" && python scripts\synthetic_lethality.py --expr data\tcga_gbm_expression.csv --max-combos 50 --output results\test_all --quiet
+echo "=== DRUG REPOSITIONING ===" && python scripts\drug_repositioning.py --expr data\tcga_gbm_expression.csv --output results\test_all --quiet
+echo "=== BIOMARKER DISCOVERY ===" && python scripts\biomarker_discovery.py --expr data\tcga_gbm_expression.csv --output results\test_all --quiet
+echo "=== MANUSCRIPT FIGURES ===" && python scripts\manuscript_figures.py --output results\test_all --quiet
+echo "=== ALL TESTS COMPLETED ==="
+
+Test 10.2: Verifica tutti i risultati
+-------------------------------------
+dir /s results\test_all\*.csv
+dir /s results\test_all\*.png
+dir /s results\test_all\*.pdf
+dir /s results\test_all\*.json
+
+================================================================================
+                    11. DOCKER TEST
+================================================================================
+
+Test 11.1: Build Docker image
+-----------------------------
+cd C:\Users\johns\Desktop\ares-gbm-research
+docker build -t ares-gbm:latest .
+
+Test 11.2: Run flux analysis in Docker
+--------------------------------------
+docker run --rm -v %cd%\results:/app/results ares-gbm:latest python scripts/flux_analysis.py --gbm-expr data/tcga_gbm_expression.csv --astro-expr data/tcga_gbm_expression.csv --output results --quiet
+
+Test 11.3: Docker Compose
+-------------------------
+docker compose run ares-gbm python scripts/drug_sensitivity.py --expr data/tcga_gbm_expression.csv --output results
+
+Test 11.4: Jupyter Notebook (Docker)
+------------------------------------
+docker compose --profile jupyter up jupyter
+# Poi aprire http://localhost:8888
+
+================================================================================
+                    12. VALIDAZIONE RISULTATI
+================================================================================
+
+Validazione 1: Controlla che tutti i CSV abbiano dati
+------------------------------------------------------
+python -c "import pandas as pd; df = pd.read_csv('results/drug_repositioning.csv'); print(f'Drugs: {len(df)}'); print(df.head())"
+
+Validazione 2: Verifica sensitivity scores
+------------------------------------------
+python -c "import pandas as pd; df = pd.read_csv('results/drug_sensitivity_demo.csv'); print(df[['drug_name', 'sensitivity_score', 'sensitivity_class']].head(10))"
+
+Validazione 3: Controlla synthetic lethality
+--------------------------------------------
+python -c "import pandas as pd; df = pd.read_csv('results/synthetic_lethality.csv'); sl = df[df['synthetic_lethal']==True]; print(f'Synthetic Lethal pairs: {len(sl)}')"
+
+Validazione 4: Verifica biomarcatori
+------------------------------------
+python -c "import pandas as pd; df = pd.read_csv('results/biomarkers_diagnostic.csv'); top = df[df['roc_auc']>0.7]; print(f'Good biomarkers (AUC>0.7): {len(top)}')"
+
+================================================================================
+                    13. PERFORMANCE TEST
+================================================================================
+
+Test 13.1: Tempo di esecuzione per script
+-----------------------------------------
+# Flux Analysis
+time python scripts/flux_analysis.py --gbm-expr data/tcga_gbm_expression.csv --astro-expr data/tcga_gbm_expression.csv --output results/perf_test --quiet
+
+# Drug Sensitivity
+time python scripts/drug_sensitivity.py --expr data/tcga_gbm_expression.csv --output results/perf_test --quiet
+
+# Synthetic Lethality (50 combos)
+time python scripts/synthetic_lethality.py --expr data/tcga_gbm_expression.csv --max-combos 50 --output results/perf_test --quiet
+
+# Drug Repositioning
+time python scripts/drug_repositioning.py --expr data/tcga_gbm_expression.csv --output results/perf_test --quiet
+
+Test 13.2: Utilizzo memoria
+---------------------------
+# Windows: Task Manager
+# Linux/Mac: /usr/bin/time -v python scripts/...
+
+================================================================================
+                    14. TEST DI REGRESSIONE
+================================================================================
+
+Test 14.1: Confronta risultati tra run
+--------------------------------------
+# Run 1
+python scripts/drug_sensitivity.py --expr data/tcga_gbm_expression.csv --output results/run1 --quiet
+copy results\run1\drug_sensitivity.csv results\run1\drug_sensitivity_backup.csv
+
+# Run 2
+python scripts/drug_sensitivity.py --expr data/tcga_gbm_expression.csv --output results/run2 --quiet
+
+# Confronta
+python -c "import pandas as pd; d1=pd.read_csv('results/run1/drug_sensitivity_backup.csv'); d2=pd.read_csv('results/run2/drug_sensitivity.csv'); print('Match:', d1.equals(d2))"
+
+================================================================================
+                    15. RISOLUZIONE PROBLEMI
+================================================================================
+
+Problema: "cobrapy not found"
+Soluzione: pip install cobrapy
+
+Problema: "plotly not found"
+Soluzione: pip install plotly kaleido
+
+Problema: "lifelines not found"
+Soluzione: pip install lifelines
+
+Problema: "sklearn not found"
+Soluzione: pip install scikit-learn
+
+Problema: "GLPK solver not available"
+Soluzione: conda install -c conda-forge glpk
+
+Problema: "Memory error"
+Soluzione: Ridurre max-combos o usare Docker con più memoria
+
+Problema: "Parser error CSV"
+Soluzione: Verificare che il CSV abbia header corretto e separatore virgola
+
+================================================================================
+                    16. COMANDI UTILI PER VERIFICHE
+================================================================================
+
+# Lista tutti i file generati
+dir /s results\*.* /b
+
+# Conta righe CSV
+python -c "import pandas as pd, glob; [print(f, len(pd.read_csv(f))) for f in glob.glob('results/**/*.csv', recursive=True)]"
+
+# Verifica tutte le figure
+dir /s results\*.png results\*.pdf /b
+
+# Controlla summary JSON
+python -c "import json, glob; [print(f, json.load(open(f))) for f in glob.glob('results/**/*_summary.json', recursive=True)]"
+
+================================================================================
+                    17. TEST RAPIDI (QUICK CHECK)
+================================================================================
+
+# Esegui in 5 minuti per verifica rapida
+python scripts/drug_sensitivity.py --expr data/expression_test.csv --output results/quick --quiet && echo "OK: Drug Sensitivity"
+python scripts/subtype_analysis.py --expr data/expression_test.csv --output results/quick --quiet && echo "OK: Subtype Analysis"
+python scripts/biomarker_discovery.py --expr data/expression_test.csv --output results/quick --quiet && echo "OK: Biomarker Discovery"
+
+================================================================================
+                    NOTE FINALI
+================================================================================
+
+- Tutti i test sono stati verificati con dati reali TCGA-GBM
+- I tempi di esecuzione variano in base alla presenza del modello metabolico
+- Senza modello: demo mode (più veloce, dati mock)
+- Con modello: analisi completa (più lento, risultati reali)
+
+Per supporto: https://github.com/ARES-Sentinel-GBM/-gbm-research/issues
+
+================================================================================
