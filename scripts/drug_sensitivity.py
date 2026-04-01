@@ -23,6 +23,14 @@ except ImportError:
     print("Error: cobrapy is required. Install with: pip install cobrapy")
     sys.exit(1)
 
+try:
+    import plotly.graph_objects as go
+    from plotly.subplots import make_subplots
+except ImportError:
+    print("Warning: plotly is required for visualization. Install with: pip install plotly")
+    go = None
+    make_subplots = None
+
 from utils import (
     load_expression_matrix,
     prepare_model,
@@ -391,7 +399,7 @@ def _get_builtin_drug_targets() -> pd.DataFrame:
     return pd.DataFrame(drugs)
 
 
-def plot_drug_sensitivity(results_df: pd.DataFrame) -> go.Figure:
+def plot_drug_sensitivity(results_df: pd.DataFrame) -> 'go.Figure':
     """
     Create drug sensitivity visualization.
     
@@ -401,7 +409,8 @@ def plot_drug_sensitivity(results_df: pd.DataFrame) -> go.Figure:
     Returns:
         Plotly Figure object
     """
-    from plotly.subplots import make_subplots
+    if go is None or make_subplots is None:
+        raise ImportError("plotly is required for visualization")
     
     fig = make_subplots(
         rows=1, cols=2,

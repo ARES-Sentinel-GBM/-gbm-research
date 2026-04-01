@@ -1,0 +1,8 @@
+{
+  "total_samples": 6,
+  "subtype_counts": {
+    "Proneural": 6
+  },
+  "differential_reactions": 24,
+  "top_differential": "R_TKT"
+}

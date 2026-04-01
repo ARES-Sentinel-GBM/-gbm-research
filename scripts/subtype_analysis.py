@@ -28,6 +28,14 @@ except ImportError:
     print("Error: cobrapy is required. Install with: pip install cobrapy")
     sys.exit(1)
 
+try:
+    import plotly.graph_objects as go
+    from plotly.subplots import make_subplots
+except ImportError:
+    print("Warning: plotly is required for visualization. Install with: pip install plotly")
+    go = None
+    make_subplots = None
+
 from utils import (
     load_expression_matrix,
     prepare_model,
@@ -228,7 +236,9 @@ def classify_subtypes(expr_df: pd.DataFrame) -> pd.DataFrame:
     assignments = []
     
     # Normalize expression (z-score)
-    expr_normalized = (expr_df - expr_df.mean(axis=1, keepdims=True)) / (expr_df.std(axis=1, keepdims=True) + 1e-6)
+    means = expr_df.mean(axis=1)
+    stds = expr_df.std(axis=1)
+    expr_normalized = (expr_df.sub(means, axis=0)) / (stds + 1e-6)
     
     for sample in expr_df.columns:
         sample_expr = expr_normalized[sample]
@@ -392,7 +402,7 @@ def _create_mock_differential_results() -> List[Dict]:
 def plot_subtype_analysis(
     assignments_df: pd.DataFrame,
     diff_df: pd.DataFrame
-) -> go.Figure:
+) -> 'go.Figure':
     """
     Create subtype analysis visualization.
     
@@ -403,6 +413,9 @@ def plot_subtype_analysis(
     Returns:
         Plotly Figure object
     """
+    if go is None or make_subplots is None:
+        raise ImportError("plotly is required for visualization")
+    
     from plotly.subplots import make_subplots
     
     fig = make_subplots(
