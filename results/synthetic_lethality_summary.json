@@ -1,0 +1,9 @@
+{
+  "total_tested": 50,
+  "synthetic_lethal": 0,
+  "synergistic": 0,
+  "additive": 50,
+  "antagonistic": 0,
+  "top_pair": "PFKP+MTHFD2",
+  "top_synergy_score": -0.18
+}

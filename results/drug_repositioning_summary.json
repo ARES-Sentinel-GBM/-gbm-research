@@ -1,0 +1,8 @@
+{
+  "total_drugs": 41,
+  "high_priority": 8,
+  "medium_priority": 24,
+  "low_priority": 9,
+  "top_candidate": "Metformin",
+  "top_score": 107.06
+}

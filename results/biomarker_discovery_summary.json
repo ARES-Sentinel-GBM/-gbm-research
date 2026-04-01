@@ -1,0 +1,9 @@
+{
+  "total_genes": 55,
+  "good_diagnostic_biomarkers": 0,
+  "good_prognostic_biomarkers": 34,
+  "top_diagnostic": "PFKP",
+  "top_diagnostic_auc": 0.6997,
+  "top_prognostic": "HK2",
+  "top_prognostic_score": 0.2922
+}

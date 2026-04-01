@@ -212,14 +212,14 @@ def run_synthetic_lethality(
     output_path = os.path.join(output_dir, 'synthetic_lethality.csv')
     results_df.to_csv(output_path, index=False)
     
+    # Summary statistics (calculate before verbose block)
+    n_synthetic_lethal = len(results_df[results_df['synthetic_lethal'] == True])
+    n_synergistic = len(results_df[results_df['interaction_type'] == 'SYNERGISTIC'])
+    n_additive = len(results_df[results_df['interaction_type'] == 'ADDITIVE'])
+    n_antagonistic = len(results_df[results_df['interaction_type'] == 'ANTAGONISTIC'])
+    
     if verbose:
         print(f"\nResults saved to: {output_path}")
-        
-        # Summary statistics
-        n_synthetic_lethal = len(results_df[results_df['synthetic_lethal'] == True])
-        n_synergistic = len(results_df[results_df['interaction_type'] == 'SYNERGISTIC'])
-        n_additive = len(results_df[results_df['interaction_type'] == 'ADDITIVE'])
-        n_antagonistic = len(results_df[results_df['interaction_type'] == 'ANTAGONISTIC'])
         
         print(f"\nSummary:")
         print(f"  Synthetic Lethal: {n_synthetic_lethal}")

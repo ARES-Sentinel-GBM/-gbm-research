@@ -177,14 +177,13 @@ def run_drug_repositioning(
     output_path = os.path.join(output_dir, 'drug_repositioning.csv')
     results_df.to_csv(output_path, index=False)
     
+    # Summary statistics (calculate before verbose block)
+    n_high = len(results_df[results_df['priority'] == 'HIGH'])
+    n_medium = len(results_df[results_df['priority'] == 'MEDIUM'])
+    n_low = len(results_df[results_df['priority'] == 'LOW'])
+    
     if verbose:
         print(f"\nResults saved to: {output_path}")
-        
-        # Summary
-        n_high = len(results_df[results_df['priority'] == 'HIGH'])
-        n_medium = len(results_df[results_df['priority'] == 'MEDIUM'])
-        n_low = len(results_df[results_df['priority'] == 'LOW'])
-        
         print(f"\nPriority Distribution:")
         print(f"  HIGH: {n_high}")
         print(f"  MEDIUM: {n_medium}")
