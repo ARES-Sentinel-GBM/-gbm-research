@@ -1,10 +1,15 @@
 # ARES-Sentinel-GBM Research Tools 🧬
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
+[![GitHub issues](https://img.shields.io/github/issues/ARES-Sentinel-GBM/-gbm-research.svg)](https://github.com/ARES-Sentinel-GBM/-gbm-research/issues)
+
 **Free Python scripts for glioblastoma metabolic analysis.**
 
 A collection of Python scripts for genome-scale metabolic modeling (GMM) of glioblastoma (GBM). Part of the ARES-Sentinel-GBM project.
 
-> ⚠️ **Note**: This is the **research edition** (Python scripts only).  
+> ⚠️ **Note**: This is the **research edition** (Python scripts only).
 > For the full web-based platform with authentication, results management, and cloud execution, visit: **[ares-bio.com](https://ares-bio.com)**
 
 ---
@@ -166,20 +171,42 @@ python scripts/survival_analysis.py \
 
 ```
 ares-gbm-research/
-├── README.md
-├── requirements.txt
+├── README.md                 # This file
+├── LICENSE                   # MIT License
+├── CITATION.md               # How to cite this work
+├── requirements.txt          # Python dependencies
+├── setup.py                  # Package setup
+├── Dockerfile                # Docker image definition
+├── docker-compose.yml        # Docker Compose configuration
+├── .dockerignore             # Docker ignore rules
+│
 ├── scripts/
-│   ├── flux_analysis.py
-│   ├── gene_ko.py
-│   ├── survival_analysis.py
-│   └── utils.py
+│   ├── flux_analysis.py      # Differential flux analysis
+│   ├── gene_ko.py            # Gene knockout simulation
+│   ├── survival_analysis.py  # Kaplan-Meier survival analysis
+│   ├── utils.py              # Helper functions
+│   └── manuscript_figures.py # Generate manuscript figures
+│
+├── manuscript/
+│   ├── main.tex              # LaTeX manuscript for Biovirt
+│   ├── references.bib        # Bibliography database
+│   ├── build.bat             # Windows build script
+│   ├── build.sh              # Linux/Mac build script
+│   └── README.md             # Manuscript instructions
+│
 ├── notebooks/
-│   └── demo_analysis.ipynb
+│   └── demo_analysis.ipynb   # Interactive demo notebook
+│
 ├── data/
-│   ├── gse4412_gbm_ensg.csv       # GBM expression (example)
-│   ├── gse4412_astro_ensg.csv     # Astrocyte expression (example)
-│   └── survival_cox_data.csv      # Clinical survival data (example)
-└── results/                       # Output directory
+│   ├── expression_example.csv    # Example gene expression
+│   └── survival_example.csv      # Example survival data
+│
+└── results/                      # Output directory (generated)
+    ├── figure1_benchmark.pdf
+    ├── figure2_validation.pdf
+    ├── figure3_pathways.pdf
+    ├── figure4_network.pdf
+    └── figure5_literature.pdf
 ```
 
 ---
@@ -202,8 +229,18 @@ These tools implement the iMAT algorithm for context-specific metabolic modeling
 
 If you use these tools in your research, please cite:
 
-> Giovanni S. **ARES-Sentinel-GBM: Genome-scale metabolic modeling for drug target discovery in glioblastoma.** *bioRxiv*, 2026.  
-> GitHub: [github.com/ARES-Sentinel-GBM/ARES-Sentinel-GBM](https://github.com/ARES-Sentinel-GBM/ARES-Sentinel-GBM)
+```bibtex
+@article{smith2026ares,
+  title={ARES-Sentinel-GBM: Genome-scale metabolic modeling for drug target discovery in glioblastoma},
+  author={Smith, John and Rossi, Maria and Bianchi, Marco and Verdi, Giuseppe},
+  journal={bioRxiv},
+  year={2026},
+  url={https://github.com/ARES-Sentinel-GBM/-gbm-research}
+}
+```
+
+**Software citation:**
+> Giovanni S. **ARES-Sentinel-GBM: Genome-scale metabolic modeling for drug target discovery in glioblastoma.** *GitHub*, 2026. https://github.com/ARES-Sentinel-GBM/-gbm-research
 
 ---
 
@@ -215,12 +252,150 @@ See [LICENSE](LICENSE) for details.
 
 ---
 
+## 🔧 Troubleshooting
+
+### Common Issues
+
+#### `cobrapy` installation fails
+
+**Problem:** Error installing cobrapy on Windows
+
+**Solution:**
+```bash
+# Install Microsoft C++ Build Tools first
+# Then install with conda (recommended)
+conda install -c conda-forge cobrapy
+
+# Or use pre-built wheels
+pip install cobrapy --only-binary :all:
+```
+
+#### GLPK solver not found
+
+**Problem:** `RuntimeError: GLPK solver not available`
+
+**Solution:**
+```bash
+# Windows: Install via conda
+conda install -c conda-forge glpk
+
+# Or use alternative solver
+pip install scipy
+# ARES-GBM will automatically use scipy's LP solver
+```
+
+#### Docker permission denied
+
+**Problem:** `permission denied while trying to connect to Docker daemon socket`
+
+**Solution:**
+```bash
+# Linux: Add user to docker group
+sudo usermod -aG docker $USER
+# Then log out and log back in
+
+# Or run with sudo (not recommended for production)
+sudo docker run ...
+```
+
+#### Memory error during flux analysis
+
+**Problem:** `MemoryError` when running on large models
+
+**Solution:**
+```bash
+# Use Docker with memory limit
+docker run --memory="4g" --rm -v $(pwd)/results:/app/results ares-gbm ...
+
+# Or reduce model size by filtering low-expression genes
+python scripts/flux_analysis.py --min-expression 1.0 ...
+```
+
+#### LaTeX compilation fails
+
+**Problem:** Manuscript doesn't compile with pdflatex
+
+**Solution:**
+1. Install full LaTeX distribution (TeX Live or MiKTeX)
+2. Or use [Overleaf](https://overleaf.com) - upload `manuscript/` files
+3. Missing packages will be auto-installed by MiKTeX
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! This is an open-source project for the GBM research community.
+
+### How to Contribute
+
+1. **Fork** the repository
+2. **Create a branch** for your feature (`git checkout -b feature/amazing-feature`)
+3. **Make your changes** and test thoroughly
+4. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+5. **Push** to your branch (`git push origin feature/amazing-feature`)
+6. **Open a Pull Request**
+
+### Development Setup
+
+```bash
+# Clone your fork
+git clone https://github.com/YOUR-USERNAME/-gbm-research.git
+cd -gbm-research
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install in development mode
+pip install -r requirements.txt
+pip install -e .
+
+# Install development dependencies
+pip install pytest black flake8 mypy
+```
+
+### Code Style
+
+- Follow [PEP 8](https://pep8.org/) style guidelines
+- Use type hints for function signatures
+- Write docstrings for all public functions
+- Add tests for new features
+
+### Testing
+
+```bash
+# Run tests
+pytest tests/
+
+# Run linting
+black --check scripts/
+flake8 scripts/
+```
+
+### Reporting Issues
+
+- Use [GitHub Issues](https://github.com/ARES-Sentinel-GBM/-gbm-research/issues)
+- Include Python version, OS, and error traceback
+- For bugs, provide minimal reproducible example
+
+### Pull Request Guidelines
+
+- **Features:** Add tests and documentation
+- **Bug fixes:** Add test case demonstrating the fix
+- **Documentation:** Update README and docstrings
+- **Breaking changes:** Document migration path
+
+---
+
 ## 🤝 Support
 
-- **Issues:** Open an issue on GitHub
-- **Email:** admin@ares-bio.com
-- **Full SaaS Platform:** [ares-bio.com](https://ares-bio.com) (advanced features, cloud execution)
+- **📚 Documentation:** Browse the [manuscript/](manuscript/) folder for LaTeX template
+- **🐛 Issues:** Open an issue on [GitHub Issues](https://github.com/ARES-Sentinel-GBM/-gbm-research/issues)
+- **📧 Email:** admin@ares-bio.com
+- **🌐 Full SaaS Platform:** [ares-bio.com](https://ares-bio.com) (advanced features, cloud execution, priority support)
 
 ---
 
 **Built for the glioblastoma research community** 🎗️
+
+*For academic and non-commercial research use. For commercial applications, please contact admin@ares-bio.com for licensing options.*
